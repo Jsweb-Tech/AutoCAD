@@ -8,7 +8,7 @@ if sys.platform == 'win32':
 
 setup(
     name="AutoCAD",
-    version="0.1.10",
+    version="0.1.11",
     packages=find_packages(),
     install_requires=requirements,
     entry_points={
@@ -19,7 +19,7 @@ setup(
     keywords=["autocad", "automation", "activex", "comtypes", "AutoCAD", "AutoCADlib"],
     author="Jones Peter",
     author_email="jonespetersoftware@gmail.com",
-    url="https://github.com/Jones-peter",
+    url="https://github.com/Jsweb-Tech/AutoCAD",
     description="A professional AutoCAD automation package with many functions.",
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
@@ -33,8 +33,8 @@ setup(
     ],
     include_package_data=True,
     project_urls={
-        "Homepage": "https://github.com/Jones-peter/AutoCAD",
-        "Documentation": "https://autocad-automation.readthedocs.io/",
-        "Bug Tracker": "https://github.com/Jones-peter/AutoCAD/issues",
+        "Homepage": "https://github.com/Jsweb-Tech/AutoCAD",
+        "Documentation": "https://jsweb-tech.github.io/AutoCAD/",
+        "Bug Tracker": "https://github.com/Jsweb-Tech/AutoCAD/issues",
     },
 )

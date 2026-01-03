@@ -7,4 +7,4 @@ print("|                               using Python.                            
 print("|  github: https://github.com/Jones-peter                    By - JonesPeter  |")
 print("|                                                                             |")
 print("╚──────────────────────────Unlimited CAD Automation───────────────────────────╝")
-print(f"Version - 0.1.10")
+print(f"Version - 0.1.11")
