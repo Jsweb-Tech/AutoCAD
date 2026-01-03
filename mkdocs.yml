@@ -1,0 +1,92 @@
+site_name: AutoCAD Python Library
+site_description: Comprehensive Python interface for AutoCAD automation and manipulation
+site_author: Jones Peter
+site_url: https://autocad-python.com
+repo_url: https://github.com/Jsweb-Tech/AutoCAD
+repo_name: Jsweb-Tech/AutoCAD
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+  - offline
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      use_pygments: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:pymdownx.emoji.twemoji
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - toc:
+      permalink: true
+  - attr_list
+  - md_in_html
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+    - Basic Concepts: getting-started/concepts.md
+  - Features:
+    - Object Creation: features/object-creation.md
+    - Layer Management: features/layers.md
+    - Block Operations: features/blocks.md
+    - Group Management: features/groups.md
+    - Drawing Properties: features/properties.md
+    - View Management: features/views.md
+    - User Interaction: features/interaction.md
+  - API Reference:
+    - AutoCAD Class: api/autocad.md
+    - Drawing Properties: api/properties.md
+    - Data Classes: api/data-classes.md
+    - Enums: api/enums.md
+    - Utilities: api/utilities.md
+  - Examples:
+    - Basic Examples: examples/basic.md
+    - Advanced Examples: examples/advanced.md
+    - Drawing Metadata: examples/metadata.md
+  - Contributing: contributing.md
+  - FAQ: faq.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Jsweb-Tech
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/jones-peter-121157221/
+    - icon: fontawesome/brands/instagram
+      link: https://www.instagram.com/jones_peter__/

@@ -251,6 +251,436 @@ def is_autocad_running():
     return False
 
 
+class DrawingProperties:
+    """
+    Manages AutoCAD Drawing Properties (Summary, Statistics, and Custom Properties).
+    Provides a Pythonic interface to access and modify document metadata.
+    
+    This class wraps the COM SummaryInfo object to handle:
+    - General properties (Title, Subject, Author, Keywords, Comments)
+    - Summary properties (Manager, Company, Category)
+    - Statistics (Read-only: Creation date, Modification date, Edit time)
+    - Custom properties (Add, Get, Remove, List all custom properties)
+    """
+    
+    def __init__(self, document):
+        """
+        Initializes the DrawingProperties manager.
+        
+        Args:
+            document: The AutoCAD Document object (ThisDrawing equivalent).
+            
+        Raises:
+            CADException: If the document is invalid.
+        """
+        try:
+            self.doc = document
+            self.summary_info = document.SummaryInfo
+        except Exception as e:
+            raise CADException(f"Error initializing DrawingProperties: {e}")
+    
+    # ==================== GENERAL PROPERTIES ====================
+    
+    def get_title(self):
+        """
+        Gets the document title.
+        
+        Returns:
+            str: The document title.
+        """
+        try:
+            return self.summary_info.Title
+        except Exception as e:
+            raise CADException(f"Error getting title: {e}")
+    
+    def set_title(self, value):
+        """
+        Sets the document title.
+        
+        Args:
+            value (str): The new title.
+            
+        Raises:
+            CADException: If the title cannot be set.
+        """
+        try:
+            self.summary_info.Title = str(value)
+        except Exception as e:
+            raise CADException(f"Error setting title: {e}")
+    
+    def get_subject(self):
+        """
+        Gets the document subject.
+        
+        Returns:
+            str: The document subject.
+        """
+        try:
+            return self.summary_info.Subject
+        except Exception as e:
+            raise CADException(f"Error getting subject: {e}")
+    
+    def set_subject(self, value):
+        """
+        Sets the document subject.
+        
+        Args:
+            value (str): The new subject.
+            
+        Raises:
+            CADException: If the subject cannot be set.
+        """
+        try:
+            self.summary_info.Subject = str(value)
+        except Exception as e:
+            raise CADException(f"Error setting subject: {e}")
+    
+    def get_author(self):
+        """
+        Gets the document author.
+        
+        Returns:
+            str: The document author.
+        """
+        try:
+            return self.summary_info.Author
+        except Exception as e:
+            raise CADException(f"Error getting author: {e}")
+    
+    def set_author(self, value):
+        """
+        Sets the document author.
+        
+        Args:
+            value (str): The new author.
+            
+        Raises:
+            CADException: If the author cannot be set.
+        """
+        try:
+            self.summary_info.Author = str(value)
+        except Exception as e:
+            raise CADException(f"Error setting author: {e}")
+    
+    def get_keywords(self):
+        """
+        Gets the document keywords.
+        
+        Returns:
+            str: The document keywords (comma-separated).
+        """
+        try:
+            return self.summary_info.Keywords
+        except Exception as e:
+            raise CADException(f"Error getting keywords: {e}")
+    
+    def set_keywords(self, value):
+        """
+        Sets the document keywords.
+        
+        Args:
+            value (str): The new keywords (comma-separated).
+            
+        Raises:
+            CADException: If the keywords cannot be set.
+        """
+        try:
+            self.summary_info.Keywords = str(value)
+        except Exception as e:
+            raise CADException(f"Error setting keywords: {e}")
+    
+    def get_comments(self):
+        """
+        Gets the document comments.
+        
+        Returns:
+            str: The document comments.
+        """
+        try:
+            return self.summary_info.Comments
+        except Exception as e:
+            raise CADException(f"Error getting comments: {e}")
+    
+    def set_comments(self, value):
+        """
+        Sets the document comments.
+        
+        Args:
+            value (str): The new comments.
+            
+        Raises:
+            CADException: If the comments cannot be set.
+        """
+        try:
+            self.summary_info.Comments = str(value)
+        except Exception as e:
+            raise CADException(f"Error setting comments: {e}")
+    
+    # ==================== SUMMARY PROPERTIES ====================
+    
+    def get_manager(self):
+        """
+        Gets the document manager name.
+        
+        Returns:
+            str: The manager name.
+        """
+        try:
+            return self.summary_info.Manager
+        except Exception as e:
+            raise CADException(f"Error getting manager: {e}")
+    
+    def set_manager(self, value):
+        """
+        Sets the document manager name.
+        
+        Args:
+            value (str): The new manager name.
+            
+        Raises:
+            CADException: If the manager cannot be set.
+        """
+        try:
+            self.summary_info.Manager = str(value)
+        except Exception as e:
+            raise CADException(f"Error setting manager: {e}")
+    
+    def get_company(self):
+        """
+        Gets the company name.
+        
+        Returns:
+            str: The company name.
+        """
+        try:
+            return self.summary_info.Company
+        except Exception as e:
+            raise CADException(f"Error getting company: {e}")
+    
+    def set_company(self, value):
+        """
+        Sets the company name.
+        
+        Args:
+            value (str): The new company name.
+            
+        Raises:
+            CADException: If the company cannot be set.
+        """
+        try:
+            self.summary_info.Company = str(value)
+        except Exception as e:
+            raise CADException(f"Error setting company: {e}")
+    
+    def get_category(self):
+        """
+        Gets the document category.
+        
+        Returns:
+            str: The document category.
+        """
+        try:
+            return self.summary_info.Category
+        except Exception as e:
+            raise CADException(f"Error getting category: {e}")
+    
+    def set_category(self, value):
+        """
+        Sets the document category.
+        
+        Args:
+            value (str): The new category.
+            
+        Raises:
+            CADException: If the category cannot be set.
+        """
+        try:
+            self.summary_info.Category = str(value)
+        except Exception as e:
+            raise CADException(f"Error setting category: {e}")
+    
+    # ==================== STATISTICS (READ-ONLY) ====================
+    
+    def get_created_date(self):
+        """
+        Gets the document creation date.
+        
+        Returns:
+            str: The creation date and time.
+        """
+        try:
+            return self.summary_info.CreateTime
+        except Exception as e:
+            raise CADException(f"Error getting creation date: {e}")
+    
+    def get_modified_date(self):
+        """
+        Gets the document last modification date.
+        
+        Returns:
+            str: The last modification date and time.
+        """
+        try:
+            return self.summary_info.ModTime
+        except Exception as e:
+            raise CADException(f"Error getting modification date: {e}")
+    
+    def get_last_saved_by(self):
+        """
+        Gets the name of the user who last saved the document.
+        
+        Returns:
+            str: The last user who saved the document.
+        """
+        try:
+            return self.summary_info.LastSavedBy
+        except Exception as e:
+            raise CADException(f"Error getting last saved by: {e}")
+    
+    def get_edit_time(self):
+        """
+        Gets the total editing time for the document.
+        
+        Returns:
+            int: The total editing time in seconds.
+        """
+        try:
+            return self.summary_info.EditTime
+        except Exception as e:
+            raise CADException(f"Error getting edit time: {e}")
+    
+    def get_revision_number(self):
+        """
+        Gets the document revision number.
+        
+        Returns:
+            str: The revision number.
+        """
+        try:
+            return self.summary_info.RevisionNumber
+        except Exception as e:
+            raise CADException(f"Error getting revision number: {e}")
+    
+    # ==================== CUSTOM PROPERTIES ====================
+    
+    def get_num_custom_info(self):
+        """
+        Gets the number of custom properties in the document.
+        Python equivalent of VBA: ThisDrawing.SummaryInfo.NumCustomInfo
+        
+        Returns:
+            int: The number of custom properties.
+        """
+        try:
+            return self.summary_info.NumCustomInfo
+        except Exception as e:
+            raise CADException(f"Error getting custom properties count: {e}")
+    
+    def get_all_custom_properties(self):
+        """
+        Retrieves all custom properties as a dictionary.
+        
+        Returns:
+            dict: A dictionary where keys are property names and values are property values.
+        """
+        try:
+            custom_props = {}
+            num_custom = self.get_num_custom_info()
+            
+            for i in range(1, num_custom + 1):
+                prop_name = self.summary_info.GetCustomByIndex(i - 1)
+                prop_value = self.summary_info.GetCustomValue(prop_name)
+                custom_props[prop_name] = prop_value
+            
+            return custom_props
+        except Exception as e:
+            raise CADException(f"Error getting all custom properties: {e}")
+    
+    def add_custom_property(self, property_name, value):
+        """
+        Adds or updates a custom property in the document.
+        
+        Args:
+            property_name (str): The name of the custom property.
+            value (str): The value of the custom property.
+            
+        Raises:
+            CADException: If the property cannot be added.
+        """
+        try:
+            self.summary_info.SetCustomByKey(property_name, str(value))
+        except Exception as e:
+            raise CADException(f"Error adding custom property '{property_name}': {e}")
+    
+    def get_custom_property(self, property_name):
+        """
+        Retrieves the value of a specific custom property.
+        
+        Args:
+            property_name (str): The name of the custom property.
+            
+        Returns:
+            str: The value of the custom property.
+            
+        Raises:
+            CADException: If the property does not exist or cannot be retrieved.
+        """
+        try:
+            return self.summary_info.GetCustomValue(property_name)
+        except Exception as e:
+            raise CADException(f"Error getting custom property '{property_name}': {e}")
+    
+    def remove_custom_property(self, property_name):
+        """
+        Removes a custom property from the document.
+        
+        Args:
+            property_name (str): The name of the custom property to remove.
+            
+        Raises:
+            CADException: If the property cannot be removed.
+        """
+        try:
+            self.summary_info.RemoveCustomByKey(property_name)
+        except Exception as e:
+            raise CADException(f"Error removing custom property '{property_name}': {e}")
+    
+    def update_custom_property(self, property_name, new_value):
+        """
+        Updates an existing custom property value.
+        
+        Args:
+            property_name (str): The name of the custom property.
+            new_value (str): The new value for the property.
+            
+        Raises:
+            CADException: If the property cannot be updated.
+        """
+        try:
+            # First check if it exists
+            existing_value = self.get_custom_property(property_name)
+            # If we get here, it exists, so update it
+            self.add_custom_property(property_name, new_value)
+        except Exception as e:
+            raise CADException(f"Error updating custom property '{property_name}': {e}")
+    
+    def clear_all_custom_properties(self):
+        """
+        Removes all custom properties from the document.
+        
+        Raises:
+            CADException: If properties cannot be cleared.
+        """
+        try:
+            num_custom = self.get_num_custom_info()
+            # Iterate backwards to avoid index shifting during deletion
+            for i in range(num_custom, 0, -1):
+                prop_name = self.summary_info.GetCustomByIndex(i - 1)
+                self.remove_custom_property(prop_name)
+        except Exception as e:
+            raise CADException(f"Error clearing custom properties: {e}")
+
+
 class AutoCAD:
     """Main class for interacting with the AutoCAD application via COM."""
     def __init__(self):
@@ -275,6 +705,28 @@ class AutoCAD:
     def modelspace(self):
         """ Returns `ActiveDocument` of current :attr:`Application`"""
         return self.doc.ModelSpace
+
+    @property
+    def properties(self):
+        """
+        Returns a DrawingProperties object for managing document metadata.
+        
+        This allows easy access to document properties like:
+        - Title, Subject, Author, Keywords, Comments
+        - Manager, Company, Category
+        - Statistics (creation date, modification date, edit time)
+        - Custom properties (add, get, remove, list)
+        
+        Example:
+            >>> autocad = AutoCAD()
+            >>> autocad.properties.set_title("My Drawing")
+            >>> autocad.properties.add_custom_property("ProjectID", "12345")
+            >>> all_custom = autocad.properties.get_all_custom_properties()
+        
+        Returns:
+            DrawingProperties: A properties manager for the active document.
+        """
+        return DrawingProperties(self.doc)
 
     def purge(self):
         """

@@ -16,6 +16,7 @@ The `AutoCAD` module provides a comprehensive interface for interacting with Aut
 - **Layer Management**: Create, delete, lock/unlock, and modify layers.
 - **Block Operations**: Insert, export, and modify blocks and their attributes.
 - **Group Management**: Create, add to, remove from, and select groups of objects.
+- **Drawing Properties Management**: Get, set, and manage document metadata (title, author, custom properties, and more). [📖 Learn More](DRAWING_PROPERTIES.md)
 - **User Interaction**: Request point, string, and integer inputs from the user.
 - **View Management**: Control the drawing view with Zoom Extents and Zoom to Object.
 - **Utility Functions**: Check if AutoCAD is installed or running.
