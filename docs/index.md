@@ -1,17 +1,8 @@
 # AutoCAD Python Library
 
-<div align="center">
-
-![AutoCAD Library](https://raw.githubusercontent.com/Jsweb-Tech/AutoCAD/main/images/new_banner.png)
-
-**A comprehensive Python interface for AutoCAD automation**
-
-[![PyPI version](https://img.shields.io/pypi/v/AutoCAD)](https://pypi.org/project/AutoCAD/)
-[![Downloads](https://static.pepy.tech/badge/AutoCAD)](https://pepy.tech/project/AutoCAD)
-[![License](https://img.shields.io/github/license/Jsweb-Tech/AutoCAD)](https://github.com/Jsweb-Tech/AutoCAD/blob/master/LICENSE)
-[![GitHub](https://img.shields.io/badge/GitHub-Jsweb--Tech-181717?style=flat-square&logo=github)](https://github.com/Jsweb-Tech)
-
-</div>
+<p align="center">
+  <img src="https://github.com/Jsweb-Tech/AutoCAD/blob/master/images/new_banner.png?raw=true" alt="JsWeb Logo" width="900">
+</p>
 
 ## Overview
 
@@ -108,7 +99,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 
 **Jones Peter**
 
-- GitHub: [@Jsweb-Tech](https://github.com/Jsweb-Tech)
+- GitHub: [jones-peter](https://github.com/jones-peter)
 - LinkedIn: [Jones Peter](https://www.linkedin.com/in/jones-peter-121157221/)
 - Instagram: [@jones_peter__](https://www.instagram.com/jones_peter__/)
 - Website: [jonespeter.site](https://jonespeter.site)
@@ -116,6 +107,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 ## Credits
 
 This project builds upon the work from:
+
 - [AutoCAD by manufino](https://github.com/manufino/AutoCAD)
 - [pyautocad by reclosedev](https://github.com/reclosedev/pyautocad)
 
