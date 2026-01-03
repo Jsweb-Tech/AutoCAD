@@ -43,6 +43,18 @@
 </footer>
 
 <style>
+  :root {
+    --footer-bg: var(--md-footer-bg-color);
+    --footer-fg: var(--md-footer-fg-color);
+    --footer-fg-light: var(--md-footer-fg-color-light, rgba(255, 255, 255, 0.7));
+    --footer-border: var(--md-footer-border-color);
+  }
+
+  .md-footer {
+    background-color: var(--footer-bg);
+    color: var(--footer-fg);
+  }
+
   .md-footer-content {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -59,12 +71,14 @@
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
     color: var(--md-primary-fg-color);
+    font-weight: 600;
   }
   
   .md-footer-section p {
     margin: 0.5rem 0;
-    color: var(--md-default-fg-color--light);
+    color: var(--footer-fg-light);
     font-size: 0.9rem;
+    line-height: 1.5;
   }
   
   .md-footer-links {
@@ -78,6 +92,8 @@
     font-size: 0.95rem;
     color: var(--md-primary-fg-color);
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
   
   .md-footer-link-group ul {
@@ -91,30 +107,38 @@
   }
   
   .md-footer-link-group a {
-    color: var(--md-default-fg-color--light);
+    color: var(--footer-fg-light);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: all 0.3s ease;
     font-size: 0.9rem;
   }
   
   .md-footer-link-group a:hover {
     color: var(--md-primary-fg-color);
-    text-decoration: underline;
+    padding-left: 4px;
+  }
+  
+  .md-copyright {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--footer-border);
   }
   
   .md-copyright__highlight {
     font-size: 0.85rem;
     padding: 0.5rem 0;
-    border-top: 1px solid var(--md-footer-border-color);
     text-align: center;
+    color: var(--footer-fg-light);
   }
   
   .md-copyright__highlight a {
     color: var(--md-primary-fg-color);
     text-decoration: none;
+    transition: opacity 0.2s;
   }
   
   .md-copyright__highlight a:hover {
+    opacity: 0.8;
     text-decoration: underline;
   }
   

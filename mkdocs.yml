@@ -13,18 +13,18 @@ theme:
   logo: https://github.com/Jsweb-Tech/jsweb/blob/main/images/jsweb_logo_bg.png?raw=true
   favicon: https://github.com/Jsweb-Tech/jsweb/blob/main/images/jsweb_logo_bg.png?raw=true
   palette:
-    - scheme: default
-      primary: blue
-      accent: blue
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
     - scheme: slate
       primary: blue
       accent: blue
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
   features:
     - navigation.instant
     - navigation.tracking
