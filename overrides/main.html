@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block footer %}
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-content">
+        <div class="md-footer-section">
+          <div class="md-footer-title">
+            <strong>AutoCAD Python Library</strong>
+          </div>
+          <p>Professional Python interface for AutoCAD automation and manipulation</p>
+        </div>
+        <div class="md-footer-links">
+          <div class="md-footer-link-group">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="https://github.com/Jsweb-Tech/AutoCAD" target="_blank" rel="noopener">GitHub Repository</a></li>
+              <li><a href="https://github.com/Jsweb-Tech/AutoCAD/issues" target="_blank" rel="noopener">Report Issues</a></li>
+              <li><a href="https://github.com/Jsweb-Tech/AutoCAD/discussions" target="_blank" rel="noopener">Discussions</a></li>
+            </ul>
+          </div>
+          <div class="md-footer-link-group">
+            <h4>Connect</h4>
+            <ul>
+              <li><a href="https://github.com/Jsweb-Tech" target="_blank" rel="noopener">GitHub</a></li>
+              <li><a href="https://www.linkedin.com/in/jones-peter-121157221/" target="_blank" rel="noopener">LinkedIn</a></li>
+              <li><a href="https://www.instagram.com/jones_peter__/" target="_blank" rel="noopener">Instagram</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="md-copyright">
+        <div class="md-copyright__highlight">
+          Copyright &copy; 2025 <a href="https://github.com/Jsweb-Tech" target="_blank" rel="noopener">JsWeb Tech</a> | 
+          <a href="https://github.com/Jsweb-Tech/AutoCAD/blob/master/LICENSE" target="_blank" rel="noopener">MIT License</a> |
+          Built with <a href="https://www.mkdocs.org/" target="_blank" rel="noopener">MkDocs</a> & 
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">Material</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .md-footer-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
+  }
+  
+  .md-footer-section {
+    padding-right: 1rem;
+  }
+  
+  .md-footer-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--md-primary-fg-color);
+  }
+  
+  .md-footer-section p {
+    margin: 0.5rem 0;
+    color: var(--md-default-fg-color--light);
+    font-size: 0.9rem;
+  }
+  
+  .md-footer-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .md-footer-link-group h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 0.95rem;
+    color: var(--md-primary-fg-color);
+    font-weight: 600;
+  }
+  
+  .md-footer-link-group ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .md-footer-link-group li {
+    margin: 0.5rem 0;
+  }
+  
+  .md-footer-link-group a {
+    color: var(--md-default-fg-color--light);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-size: 0.9rem;
+  }
+  
+  .md-footer-link-group a:hover {
+    color: var(--md-primary-fg-color);
+    text-decoration: underline;
+  }
+  
+  .md-copyright__highlight {
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--md-footer-border-color);
+    text-align: center;
+  }
+  
+  .md-copyright__highlight a {
+    color: var(--md-primary-fg-color);
+    text-decoration: none;
+  }
+  
+  .md-copyright__highlight a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 600px) {
+    .md-footer-content {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    
+    .md-footer-links {
+      grid-template-columns: 1fr;
+    }
+    
+    .md-footer-section {
+      padding-right: 0;
+    }
+  }
+</style>
+{% endblock %}

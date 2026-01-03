@@ -1,13 +1,17 @@
 site_name: AutoCAD Python Library
 site_description: Comprehensive Python interface for AutoCAD automation and manipulation
 site_author: Jones Peter
-site_url: https://autocad-python.com
+site_url: https://jsweb-tech.github.io/AutoCAD/
 repo_url: https://github.com/Jsweb-Tech/AutoCAD
 repo_name: Jsweb-Tech/AutoCAD
 edit_uri: edit/main/docs/
 
 theme:
   name: material
+  custom_dir: overrides
+  language: en
+  logo: https://github.com/Jsweb-Tech/jsweb/blob/main/images/jsweb_logo_bg.png?raw=true
+  favicon: https://github.com/Jsweb-Tech/jsweb/blob/main/images/jsweb_logo_bg.png?raw=true
   palette:
     - scheme: default
       primary: blue
@@ -38,6 +42,9 @@ theme:
 plugins:
   - search
   - offline
+
+extra_css:
+  - stylesheets/extra.css
 
 markdown_extensions:
   - admonition

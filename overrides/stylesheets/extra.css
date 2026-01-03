@@ -1,0 +1,33 @@
+/* Fix the footer to the bottom */
+.md-footer {
+    bottom: 0;
+    width: 100%;
+    background-color: var(--md-footer-bg-color);
+    z-index: 1;
+}
+
+/*
+   Header Title Fix:
+   Always show the first topic (Site Title) and hide the second topic (Page Title).
+*/
+
+/* Target the container for the titles */
+.md-header__title {
+    /* Ensure the container is visible */
+    opacity: 1 !important;
+}
+
+/* 1. The Site Title (JsWeb) */
+.md-header__title .md-header__topic:first-child {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+    display: block !important;
+    width: auto !important;
+    font-weight: bold !important;
+}
+
+/* 2. The Page Title (e.g., Getting Started) */
+.md-header__title .md-header__topic:last-child {
+    display: none !important;
+}
