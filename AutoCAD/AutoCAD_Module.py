@@ -788,6 +788,59 @@ class AutoCAD:
             return line
         except Exception as e:
             raise CADException(f"Error adding line: {e}")
+    
+    def _ensure_linetype_loaded(self, linetype_name):
+        """
+        Ensures a linetype is loaded in the document.
+        Args:
+            linetype_name (str): The name of the linetype to load.
+        """
+        try:
+            linetypes = self.doc.Linetypes
+            linetype_exists = False
+            for lt in linetypes:
+                if lt.Name.lower() == linetype_name.lower():
+                    linetype_exists = True
+                    break
+            
+            if not linetype_exists:
+                try:
+                    self.doc.Linetypes.Load(linetype_name, "acad.lin")
+                except:
+                    try:
+                        self.doc.Linetypes.Load(linetype_name, "acadiso.lin")
+                    except:
+                        pass
+        except:
+            pass  # Silently continue if loading fails
+
+    def set_linetype(self, obj, linetype):
+        """
+        Sets the linetype of an object, automatically loading it if needed.
+        
+        Args:
+            obj: The AutoCAD object to modify.
+            linetype (LineStyle or str): The linetype to apply.
+            
+        Raises:
+            CADException: If the linetype cannot be set.
+            
+        Example:
+            >>> acad = AutoCAD()
+            >>> line = acad.add_line(APoint(0, 0, 0), APoint(100, 0, 0))
+            >>> acad.set_linetype(line, LineStyle.DASHED)
+        """
+        try:
+            # Handle both LineStyle enum and string
+            linetype_name = linetype.value if isinstance(linetype, LineStyle) else linetype
+            
+            # Ensure linetype is loaded
+            self._ensure_linetype_loaded(linetype_name)
+            
+            # Apply the linetype
+            obj.Linetype = linetype_name
+        except Exception as e:
+            raise CADException(f"Error setting linetype: {e}")
 
     def add_rectangle(self, lower_left, upper_right):
         """
