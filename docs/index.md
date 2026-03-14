@@ -15,6 +15,7 @@ Whether you're new to AutoCAD automation or an experienced VBA developer, this l
 - Object Creation - Create circles, lines, rectangles, ellipses, text, dimensions, polylines, and more
 - Layer Management - Create, delete, lock/unlock, and manage layers
 - Block Operations - Insert, export, and modify blocks and their attributes
+- Block Operations - Insert, modify attributes, and export blocks to a separate `.dwg` file
 - Group Management - Create and manage groups of objects
 - Drawing Properties - Access and modify document metadata (title, author, custom properties)
 - View Control - Zoom, pan, and navigate your drawings

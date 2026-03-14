@@ -1,8 +1,10 @@
+import os
 import subprocess
 import psutil
 import pythoncom
 import win32com.client
 from enum import Enum
+import time
 
 # project by jones peter
 class Color(Enum):
@@ -691,20 +693,37 @@ class AutoCAD:
             CADException: If AutoCAD application cannot be initialized.
         """
         try:
-            self.acad = win32com.client.Dispatch("AutoCAD.Application")
+            try:
+                self.acad = win32com.client.gencache.EnsureDispatch("AutoCAD.Application")
+            except Exception:
+                self.acad = win32com.client.Dispatch("AutoCAD.Application")
             self.acad.Visible = True
         except Exception as e:
             raise CADException(f"Error initializing AutoCAD: {e}")
 
+    def _get_with_retry(self, func, retries=5, delay=0.5):
+        """
+        Helper method to retry COM property/method access.
+        Often needed when AutoCAD is busy initializing or loading a document.
+        """
+        for i in range(retries):
+            try:
+                return func()
+            except Exception as e:
+                # "Call was rejected by callee" (-2147418111) usually means busy
+                if i == retries - 1:
+                    raise e
+                time.sleep(delay)
+
     @property
     def doc(self):
         """ Returns `ActiveDocument` of current :attr:`Application`"""
-        return self.acad.ActiveDocument
+        return self._get_with_retry(lambda: self.acad.ActiveDocument)
 
     @property
     def modelspace(self):
-        """ Returns `ActiveDocument` of current :attr:`Application`"""
-        return self.doc.ModelSpace
+        """ Returns `ModelSpace` of current :attr:`Application`"""
+        return self._get_with_retry(lambda: self.doc.ModelSpace)
 
     @property
     def properties(self):
@@ -751,9 +770,17 @@ class AutoCAD:
         Yields:
             The AutoCAD object.
         """
-        for obj in self.modelspace:
-            if object_type is None or obj.EntityName == object_type:
-                yield obj
+        # Changed to index-based iteration to avoid COM enumeration issues with early binding
+        model_space = self.modelspace
+        count = self._get_with_retry(lambda: model_space.Count)
+        for i in range(count):
+            try:
+                obj = self._get_with_retry(lambda: model_space.Item(i), retries=3, delay=0.1)
+                entity_name = self._get_with_retry(lambda: obj.EntityName, retries=3, delay=0.1)
+                if object_type is None or entity_name == object_type:
+                    yield obj
+            except Exception:
+                continue
 
     def add_circle(self, center, radius):
         """
@@ -798,8 +825,9 @@ class AutoCAD:
         try:
             linetypes = self.doc.Linetypes
             linetype_exists = False
-            for lt in linetypes:
-                if lt.Name.lower() == linetype_name.lower():
+            # Iterate by index to avoid potential enumeration issues
+            for i in range(linetypes.Count):
+                if linetypes.Item(i).Name.lower() == linetype_name.lower():
                     linetype_exists = True
                     break
             
@@ -1101,8 +1129,12 @@ class AutoCAD:
         """
         try:
             blocks = self.doc.Blocks
-            user_defined_blocks = [block.Name for block in blocks
-                                   if not block.IsLayout and not block.Name.startswith('*') and block.Name != 'GENAXEH']
+            user_defined_blocks = []
+            # Changed to index-based iteration
+            for i in range(blocks.Count):
+                block = blocks.Item(i)
+                if not block.IsLayout and not block.Name.startswith('*') and block.Name != 'GENAXEH':
+                    user_defined_blocks.append(block.Name)
             return user_defined_blocks
         except Exception as e:
             raise CADException(f"Error getting user-defined blocks: {e}")
@@ -1204,6 +1236,8 @@ class AutoCAD:
         """
         try:
             self.acad.Documents.Open(file_path)
+            # Give AutoCAD a small moment to initialize the COM objects for the newly opened file
+            time.sleep(1)
         except Exception as e:
             raise CADException(f"Error opening file '{file_path}': {e}")
 
@@ -1364,9 +1398,10 @@ class AutoCAD:
         """
         try:
             layer = self.doc.Layers.Item(layer_name)
-            linetypes = self.doc.Linetypes
-            if linetype_name not in linetypes:
-                self.doc.Linetypes.Load(linetype_name, linetype_name)
+            
+            # Ensure linetype is loaded using the helper method
+            self._ensure_linetype_loaded(linetype_name)
+            
             layer.Linetype = linetype_name
         except Exception as e:
             raise CADException(f"Error setting linetype of layer '{layer_name}': {e}")
@@ -1494,20 +1529,120 @@ class AutoCAD:
         except Exception as e:
             raise CADException(f"Error inserting block from file '{file_path}': {e}")
 
-    def export_block_to_file(self, block_name, file_path):
-        """
-        Exports a block definition from the current drawing to a new .dwg file.
-        Args:
-            block_name (str): The name of the block to export.
-            file_path (str): The destination path for the new .dwg file.
-        Raises:
-            CADException: If the block cannot be exported.
-        """
+    def export_blocks_to_file(self, block_names, file_path):
+        ss_name = "TEMP_EXPORT_SS"
+        temp_file = file_path + ".tmp.dwg"
+        temp_instances = []
+
+        def retry_com(func, retries=10, delay=2.0):
+            for attempt in range(retries):
+                try:
+                    return func()
+                except Exception as e:
+                    if "callee" in str(e).lower() or "-2147418111" in str(e):
+                        print(f"AutoCAD busy, retrying ({attempt + 1}/{retries})...")
+                        time.sleep(delay)
+                    else:
+                        raise
+            raise CADException(f"AutoCAD rejected the call after {retries} retries.")
+
         try:
-            block = self.doc.Blocks.Item(block_name)
-            block.Export(file_path)
+            try:
+                self.doc.SelectionSets.Item(ss_name).Delete()
+            except:
+                pass
+
+            export_ss = self.doc.SelectionSets.Add(ss_name)
+
+            # Use a far-away point so we never overlap existing objects
+            safe_point = win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, [1e18, 1e18, 0.0])
+
+            for block_name in block_names:
+                found_block = None
+                for i in range(self.doc.Blocks.Count):
+                    block = self.doc.Blocks.Item(i)
+                    if block.Name.lower() == block_name.lower():
+                        found_block = block
+                        break
+
+                if not found_block:
+                    raise CADException(f"Block '{block_name}' not found in the current drawing.")
+
+                print(f"Found '{block_name}'")
+                temp_instance = retry_com(lambda: self.doc.ModelSpace.InsertBlock(safe_point, block_name, 1, 1, 1, 0))
+                temp_instances.append(temp_instance)
+                time.sleep(0.3)
+
+            objs_array = win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_DISPATCH, temp_instances)
+            export_ss.AddItems(objs_array)
+
+            time.sleep(1.0)
+
+            old_expert = self.doc.GetVariable("EXPERT")
+            self.doc.SetVariable("EXPERT", 2)
+            try:
+                retry_com(lambda: self.doc.Wblock(temp_file, export_ss))
+            finally:
+                self.doc.SetVariable("EXPERT", old_expert)
+
+            # Clean up temp instances from ModelSpace
+            for inst in temp_instances:
+                try:
+                    inst.Delete()
+                except:
+                    pass
+            temp_instances = []
+
+            try:
+                self.doc.SelectionSets.Item(ss_name).Delete()
+            except:
+                pass
+
+            time.sleep(1.0)
+
+            if os.path.exists(file_path):
+                target_doc = retry_com(lambda: self.acad.Documents.Open(file_path))
+                inserted = retry_com(lambda: target_doc.ModelSpace.InsertBlock(
+                    win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, [1e18, 1e18, 0.0]),
+                    temp_file, 1, 1, 1, 0
+                ))
+                try:
+                    inserted.Delete()
+                except:
+                    pass
+                target_doc.Save()
+                target_doc.Close(False)
+            else:
+                os.rename(temp_file, file_path)
+
+            print(f"Exported {block_names} to '{file_path}'")
+
+            self.close(save_changes=False)
+
+        except CADException:
+            raise
         except Exception as e:
-            raise CADException(f"Error exporting block '{block_name}' to '{file_path}': {e}")
+            raise CADException(f"Export failed: {e}")
+
+        finally:
+            for inst in temp_instances:
+                try:
+                    inst.Delete()
+                except:
+                    pass
+            try:
+                self.doc.SelectionSets.Item(ss_name).Delete()
+            except:
+                pass
+            if os.path.exists(temp_file):
+                for attempt in range(5):
+                    try:
+                        time.sleep(0.5)
+                        os.remove(temp_file)
+                        print(f"Temp file deleted: {temp_file}")
+                        break
+                    except Exception as e:
+                        print(f"Warning: Could not delete temp file (attempt {attempt + 1}/5): {e}")
 
     def modify_block_attribute(self, block_ref, tag, new_value):
         """
@@ -1717,8 +1852,9 @@ class AutoCAD:
             if text_style:
                 text_styles = self.doc.TextStyles
                 style_exists = False
-                for style in text_styles:
-                    if style.Name.lower() == text_style.lower():
+                # Changed to index-based iteration
+                for i in range(text_styles.Count):
+                    if text_styles.Item(i).Name.lower() == text_style.lower():
                         style_exists = True
                         break
 

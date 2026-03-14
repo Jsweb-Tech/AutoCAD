@@ -8,7 +8,7 @@ if sys.platform == 'win32':
 
 setup(
     name="AutoCAD",
-    version="0.1.11",
+    version="0.1.12",
     packages=find_packages(),
     install_requires=requirements,
     entry_points={
